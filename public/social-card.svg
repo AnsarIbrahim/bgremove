@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="sc-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#030712"/>
+      <stop offset="100%" stop-color="#0f0f2e"/>
+    </linearGradient>
+    <linearGradient id="sc-icon" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="sc-title" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="50%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+    <radialGradient id="sc-glow1" cx="25%" cy="30%" r="50%">
+      <stop offset="0%" stop-color="#3b82f6" stop-opacity="0.2"/>
+      <stop offset="100%" stop-color="#3b82f6" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="sc-glow2" cx="75%" cy="70%" r="50%">
+      <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#7c3aed" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="sc-shadow">
+      <feDropShadow dx="0" dy="8" stdDeviation="20" flood-color="#7c3aed" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#sc-bg)"/>
+  <rect width="1200" height="630" fill="url(#sc-glow1)"/>
+  <rect width="1200" height="630" fill="url(#sc-glow2)"/>
+
+  <!-- Brand logo top-left -->
+  <rect x="60" y="52" width="72" height="72" rx="18" fill="url(#sc-icon)" filter="url(#sc-shadow)"/>
+  <!-- Lightning bolt scaled for 72×72: scale 2.5 + offset 14 -->
+  <!-- M13 10V3L4 14h7v7l9-11h-7z → M(46.5,39)V(21.5)L(24,49)h(17.5)v(17.5)l(22.5,-27.5)h(-17.5)z -->
+  <path d="M46 39V22L24 49h17v17l22-27h-17z" fill="white" transform="translate(60,52)"/>
+  <text x="148" y="102" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-weight="800" font-size="36" fill="white" letter-spacing="-0.5">AiTechies</text>
+
+  <!-- Main headline -->
+  <text x="600" y="240" text-anchor="middle"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-weight="800" font-size="96" fill="url(#sc-title)" letter-spacing="-3">
+    Remove Backgrounds
+  </text>
+  <text x="600" y="340" text-anchor="middle"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-weight="800" font-size="72" fill="#818cf8" letter-spacing="-2">
+    Instantly
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="420" text-anchor="middle"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-weight="400" font-size="28" fill="#94a3b8" letter-spacing="0.5">
+    Free · AI-Powered · 100% In-Browser · No Uploads
+  </text>
+
+  <!-- Tag pills -->
+  <rect x="270" y="475" width="200" height="48" rx="24" fill="rgba(99,102,241,0.15)" stroke="#6366f1" stroke-width="1.5" stroke-opacity="0.5"/>
+  <text x="370" y="505" text-anchor="middle"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-weight="600" font-size="20" fill="#a5b4fc">Up to 10 Images</text>
+
+  <rect x="490" y="475" width="160" height="48" rx="24" fill="rgba(99,102,241,0.15)" stroke="#6366f1" stroke-width="1.5" stroke-opacity="0.5"/>
+  <text x="570" y="505" text-anchor="middle"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-weight="600" font-size="20" fill="#a5b4fc">No Sign-up</text>
+
+  <rect x="670" y="475" width="250" height="48" rx="24" fill="rgba(99,102,241,0.15)" stroke="#6366f1" stroke-width="1.5" stroke-opacity="0.5"/>
+  <text x="795" y="505" text-anchor="middle"
+    font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif"
+    font-weight="600" font-size="20" fill="#a5b4fc">PNG · JPG · WebP</text>
+</svg>

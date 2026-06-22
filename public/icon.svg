@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="icon-g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+    <filter id="icon-shadow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#7c3aed" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+
+  <!-- Background square -->
+  <rect width="64" height="64" rx="16" fill="url(#icon-g)" filter="url(#icon-shadow)"/>
+
+  <!-- Lightning bolt centered in 64×64 -->
+  <!-- Original M13 10V3L4 14h7v7l9-11h-7z on 24×24 -->
+  <!-- Scale 2x, offset 8: M(34,28)V(14)L(16,36)h(14)v(14)l(18,-22)h(-14)z -->
+  <path d="M34 28V14L16 36h14v14l18-22h-14z" fill="white"/>
+</svg>
