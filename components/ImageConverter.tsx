@@ -29,6 +29,8 @@ const MIME: Record<OutputFormat, string> = {
   avif: 'image/avif',
 }
 
+const MAX_FILES = 10
+
 function fmtBytes(n: number) {
   if (n < 1024) return `${n} B`
   if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`
@@ -85,15 +87,20 @@ export default function ImageConverter() {
   function addFiles(files: FileList | File[]) {
     const arr = Array.from(files).filter((f) => f.type.startsWith('image/'))
     if (!arr.length) return
-    const newItems: ConvertItem[] = arr.map((file) => ({
-      id: `${Date.now()}-${Math.random()}`,
-      file,
-      previewUrl: URL.createObjectURL(file),
-      resultUrl: null,
-      resultSize: null,
-      status: 'idle',
-    }))
-    setItems((prev) => [...prev, ...newItems])
+    setItems((prev) => {
+      const slots = MAX_FILES - prev.length
+      if (slots <= 0) return prev
+      const toAdd = arr.slice(0, slots)
+      const newItems: ConvertItem[] = toAdd.map((file) => ({
+        id: `${Date.now()}-${Math.random()}`,
+        file,
+        previewUrl: URL.createObjectURL(file),
+        resultUrl: null,
+        resultSize: null,
+        status: 'idle',
+      }))
+      return [...prev, ...newItems]
+    })
   }
 
   const onDrop = useCallback((e: React.DragEvent) => {
@@ -193,6 +200,8 @@ export default function ImageConverter() {
   const doneCount = items.filter((i) => i.status === 'done').length
   const convertingAny = items.some((i) => i.status === 'converting')
   const hasPending = items.some((i) => i.status === 'idle' || i.status === 'error')
+  const isFull = items.length >= MAX_FILES
+  const remaining = MAX_FILES - items.length
 
   return (
     <div className="flex flex-col gap-5">
@@ -243,14 +252,16 @@ export default function ImageConverter() {
 
       {/* Upload zone */}
       <div
-        onDrop={onDrop}
-        onDragOver={onDragOver}
-        onDragLeave={onDragLeave}
-        onClick={() => inputRef.current?.click()}
-        className={`relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed cursor-pointer transition-all p-8 sm:p-12 ${
-          dragging
-            ? 'border-indigo-500/60 bg-indigo-500/10'
-            : 'border-white/8 bg-white/2 hover:border-white/15 hover:bg-white/4'
+        onDrop={isFull ? undefined : onDrop}
+        onDragOver={isFull ? undefined : onDragOver}
+        onDragLeave={isFull ? undefined : onDragLeave}
+        onClick={isFull ? undefined : () => inputRef.current?.click()}
+        className={`relative flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed transition-all p-8 sm:p-12 ${
+          isFull
+            ? 'border-white/5 bg-white/1 opacity-50 cursor-not-allowed'
+            : dragging
+            ? 'border-indigo-500/60 bg-indigo-500/10 cursor-pointer'
+            : 'border-white/8 bg-white/2 hover:border-white/15 hover:bg-white/4 cursor-pointer'
         }`}
       >
         <input
@@ -268,8 +279,14 @@ export default function ImageConverter() {
           </svg>
         </div>
         <div className="text-center">
-          <p className="text-sm text-slate-300 font-medium">Drop images here or click to browse</p>
-          <p className="text-xs text-slate-600 mt-1">PNG · JPG · WebP · GIF · BMP · AVIF · TIFF and more</p>
+          <p className="text-sm text-slate-300 font-medium">
+            {isFull ? 'Limit reached — remove an image to add more' : 'Drop images here or click to browse'}
+          </p>
+          <p className="text-xs text-slate-600 mt-1">
+            {isFull
+              ? `${MAX_FILES}/${MAX_FILES} images`
+              : `PNG · JPG · WebP · GIF · BMP · AVIF · TIFF — up to ${remaining} more`}
+          </p>
         </div>
       </div>
 
@@ -278,7 +295,7 @@ export default function ImageConverter() {
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between mb-1">
             <p className="text-xs text-slate-500 font-medium uppercase tracking-wider">
-              {items.length} {items.length === 1 ? 'image' : 'images'}
+              {items.length} / {MAX_FILES} images
             </p>
             <button onClick={clearAll} className="text-xs text-slate-700 hover:text-slate-400 transition-colors">
               Clear all
