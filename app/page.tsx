@@ -1,4 +1,4 @@
-import BgRemover from '@/components/BgRemover'
+import ToolTabs from '@/components/ToolTabs'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://bgremove.aitechies.in'
 
@@ -187,33 +187,15 @@ export default function Home() {
           </div>
 
           {/* Live badge */}
-          <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/10 mb-5 sm:mb-8">
+          <div className="flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/10 mb-8 sm:mb-10">
             <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
             <span className="text-indigo-300 text-xs font-medium tracking-wide">
               AI-Powered · 100% In-Browser · Free & Open Source
             </span>
           </div>
 
-          {/* Hero */}
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-center leading-tight mb-4 sm:mb-5">
-            <span className="text-white">Remove Backgrounds</span>
-            <br />
-            <span className="bg-linear-to-r from-blue-400 via-indigo-400 to-violet-400 bg-clip-text text-transparent">
-              Instantly
-            </span>
-          </h1>
-          <p className="text-slate-400 text-base sm:text-lg text-center max-w-lg mb-8 sm:mb-14 leading-relaxed">
-            Upload up to 10 images and let AI handle the rest.
-            <br />
-            <span className="text-slate-600 text-sm">No server uploads. No API keys. Everything runs in your browser.</span>
-          </p>
-
-          {/* Main card */}
-          <div className="w-full max-w-3xl">
-            <div className="rounded-2xl border border-white/[0.07] bg-white/2.5 backdrop-blur-2xl p-4 sm:p-8 shadow-2xl shadow-black/50">
-              <BgRemover />
-            </div>
-          </div>
+          {/* Hero + tabs + tool — all tab-aware */}
+          <ToolTabs />
 
           {/* Footer */}
           <p className="text-slate-700 text-xs mt-10 text-center">
