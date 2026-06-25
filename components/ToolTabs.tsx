@@ -3,8 +3,9 @@
 import { useState } from 'react'
 import BgRemover from '@/components/BgRemover'
 import ImageConverter from '@/components/ImageConverter'
+import ImageResizer from '@/components/ImageResizer'
 
-type Tab = 'bg' | 'convert'
+type Tab = 'bg' | 'convert' | 'resize'
 
 const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   {
@@ -19,11 +20,21 @@ const TABS: { id: Tab; label: string; icon: React.ReactNode }[] = [
   },
   {
     id: 'convert',
-    label: 'Convert Format',
+    label: 'Convert',
     icon: (
       <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
           d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+      </svg>
+    ),
+  },
+  {
+    id: 'resize',
+    label: 'Resize',
+    icon: (
+      <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+          d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
       </svg>
     ),
   },
@@ -39,6 +50,11 @@ const HERO: Record<Tab, { heading: string; accent: string; sub: string }> = {
     heading: 'Convert Any Image',
     accent: 'In Seconds',
     sub: 'PNG, JPG, WebP, AVIF — pick your format and convert in bulk. Everything stays in your browser.',
+  },
+  resize: {
+    heading: 'Resize Without',
+    accent: 'Cropping',
+    sub: 'Set a width or height — the other adjusts automatically to keep your image proportional. Up to 10 images at once.',
   },
 }
 
@@ -60,13 +76,13 @@ export default function ToolTabs() {
         {hero.sub}
       </p>
 
-      {/* Tab bar */}
-      <div className="flex p-1 rounded-2xl bg-white/[0.04] border border-white/[0.06] mb-6 w-full max-w-xs sm:max-w-sm">
+      {/* Tab bar — 3 tabs */}
+      <div className="flex p-1 rounded-2xl bg-white/4 border border-white/6 mb-6 w-full max-w-sm sm:max-w-md">
         {TABS.map((t) => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
-            className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 sm:px-5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+            className={`flex-1 flex items-center justify-center gap-1.5 sm:gap-2 py-2.5 px-2 sm:px-4 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-200 ${
               tab === t.id
                 ? 'bg-white/10 text-white shadow-sm'
                 : 'text-slate-500 hover:text-slate-300'
@@ -83,6 +99,7 @@ export default function ToolTabs() {
         <div className="rounded-2xl border border-white/[0.07] bg-white/2.5 backdrop-blur-2xl p-4 sm:p-8 shadow-2xl shadow-black/50">
           {tab === 'bg'      && <BgRemover />}
           {tab === 'convert' && <ImageConverter />}
+          {tab === 'resize'  && <ImageResizer />}
         </div>
       </div>
     </>
