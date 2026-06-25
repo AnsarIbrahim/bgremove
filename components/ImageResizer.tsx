@@ -45,6 +45,26 @@ function getOutputSize(
   }
 }
 
+function getContentBounds(
+  data: Uint8ClampedArray,
+  sw: number,
+  sh: number
+): { sx: number; sy: number; tw: number; th: number } {
+  let minX = sw, minY = sh, maxX = -1, maxY = -1
+  for (let y = 0; y < sh; y++) {
+    for (let x = 0; x < sw; x++) {
+      if (data[(y * sw + x) * 4 + 3] > 10) {
+        if (x < minX) minX = x
+        if (x > maxX) maxX = x
+        if (y < minY) minY = y
+        if (y > maxY) maxY = y
+      }
+    }
+  }
+  if (maxX < 0) return { sx: 0, sy: 0, tw: sw, th: sh }
+  return { sx: minX, sy: minY, tw: maxX - minX + 1, th: maxY - minY + 1 }
+}
+
 async function resizeImage(
   file: File,
   outW: number,
@@ -66,14 +86,23 @@ async function resizeImage(
   const sh = img.naturalHeight
   if (!sw || !sh) throw new Error('Image has zero dimensions')
 
+  // Detect transparent padding and crop to content bounds
+  const tmpCanvas = document.createElement('canvas')
+  tmpCanvas.width = sw
+  tmpCanvas.height = sh
+  const tmpCtx = tmpCanvas.getContext('2d')!
+  tmpCtx.drawImage(img, 0, 0)
+  const { data } = tmpCtx.getImageData(0, 0, sw, sh)
+  const { sx, sy, tw, th } = getContentBounds(data, sw, sh)
+
   const canvas = document.createElement('canvas')
   canvas.width = w
   canvas.height = h
   const ctx = canvas.getContext('2d')!
   ctx.imageSmoothingEnabled = true
   ctx.imageSmoothingQuality = 'high'
-  // 9-arg form: explicit source rect (full original) → destination rect (full canvas)
-  ctx.drawImage(img, 0, 0, sw, sh, 0, 0, w, h)
+  // Source = content bounding box (trims transparent edges); dest = full target canvas
+  ctx.drawImage(img, sx, sy, tw, th, 0, 0, w, h)
 
   const blob = await new Promise<Blob | null>((res) =>
     canvas.toBlob((b) => res(b), 'image/png')
