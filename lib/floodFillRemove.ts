@@ -9,19 +9,20 @@ function colorDistance(a: RGB, b: RGB): number {
   return Math.sqrt((a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2 + (a[2] - b[2]) ** 2)
 }
 
-// Sample many pixels along all four edges and use the median — much more robust than
-// averaging 4 corners, which breaks when design elements bleed to the image border.
+// Sample a small patch at each of the four image corners. Corners are almost always
+// background — using full-edge sampling fails when a large design element (gradient,
+// gradient bg, rounded-rect content) dominates the edges and skews the median.
 function detectBackgroundColor(data: Uint8ClampedArray, width: number, height: number): RGB {
+  const patch = Math.max(2, Math.min(12, Math.round(Math.min(width, height) / 40)))
   const samples: RGB[] = []
-  const step = Math.max(1, Math.round(Math.min(width, height) / 60))
 
-  for (let x = 0; x < width; x += step) {
-    samples.push(getPixelRGB(data, width, x, 0))
-    samples.push(getPixelRGB(data, width, x, height - 1))
-  }
-  for (let y = step; y < height - step; y += step) {
-    samples.push(getPixelRGB(data, width, 0, y))
-    samples.push(getPixelRGB(data, width, width - 1, y))
+  for (let dy = 0; dy < patch; dy++) {
+    for (let dx = 0; dx < patch; dx++) {
+      samples.push(getPixelRGB(data, width, dx, dy))
+      samples.push(getPixelRGB(data, width, width - 1 - dx, dy))
+      samples.push(getPixelRGB(data, width, dx, height - 1 - dy))
+      samples.push(getPixelRGB(data, width, width - 1 - dx, height - 1 - dy))
+    }
   }
 
   const rs = samples.map((s) => s[0]).sort((a, b) => a - b)
